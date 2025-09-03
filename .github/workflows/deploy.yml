@@ -27,17 +27,15 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "18"
-          cache: "npm"
-          cache-dependency-path: frontend/package-lock.json
 
       - name: Install dependencies
         run: |
-          cd frontend
-          npm ci
+          cd smart-data-organizer/frontend
+          npm install
 
       - name: Build application
         run: |
-          cd frontend
+          cd smart-data-organizer/frontend
           npm run build
 
       - name: Setup Pages
@@ -46,7 +44,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: "./frontend/build"
+          path: "./smart-data-organizer/frontend/build"
 
   deploy:
     environment:

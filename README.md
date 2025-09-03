@@ -19,6 +19,7 @@ A comprehensive web application that allows users to upload raw data files and r
 ## Technology Stack
 
 ### Frontend
+
 - **React 18** with TypeScript
 - **Material-UI (MUI)** for components and theming
 - **React Router** for navigation
@@ -26,6 +27,7 @@ A comprehensive web application that allows users to upload raw data files and r
 - **React Query** for state management
 
 ### Backend
+
 - **Node.js** with Express and TypeScript
 - **Multer** for file uploads
 - **xlsx** library for Excel processing
@@ -36,17 +38,20 @@ A comprehensive web application that allows users to upload raw data files and r
 ## Quick Start
 
 ### Option 1: Use the Live Demo
+
 Visit [https://abhisheksingh17cyber.github.io/excellsorted](https://abhisheksingh17cyber.github.io/excellsorted) to try the application immediately.
 
 ### Option 2: Run Locally
 
 1. **Clone the repository:**
+
    ```bash
    git clone https://github.com/Abhisheksingh17cyber/excellsorted.git
    cd excellsorted/smart-data-organizer
    ```
 
 2. **Install dependencies:**
+
    ```bash
    npm install
    cd backend && npm install
@@ -54,6 +59,7 @@ Visit [https://abhisheksingh17cyber.github.io/excellsorted](https://abhisheksing
    ```
 
 3. **Start development servers:**
+
    ```bash
    # From the root directory
    npm run dev
@@ -66,12 +72,14 @@ Visit [https://abhisheksingh17cyber.github.io/excellsorted](https://abhisheksing
 ## Usage Guide
 
 ### 1. Upload Files
+
 - Navigate to the Upload page
 - Select or drag & drop your data files
 - Supported formats: CSV, Excel (.xlsx, .xls), JSON, TXT
 - Click "Upload Files" to proceed
 
 ### 2. Provide Instructions
+
 - Describe what you want to do with your data in plain English
 - Examples:
   - "Sort data by sales amount and create a monthly trend chart"
@@ -80,6 +88,7 @@ Visit [https://abhisheksingh17cyber.github.io/excellsorted](https://abhisheksing
   - "Identify outliers and create data quality report"
 
 ### 3. Processing
+
 - The system will analyze your data and apply your instructions
 - Watch the progress through multiple stages:
   - Data analysis and schema detection
@@ -89,6 +98,7 @@ Visit [https://abhisheksingh17cyber.github.io/excellsorted](https://abhisheksing
   - File organization and packaging
 
 ### 4. Download Results
+
 - View generated files, charts, and insights
 - Download individual files or complete ZIP package
 - Access detailed analysis reports and visualizations
@@ -96,16 +106,19 @@ Visit [https://abhisheksingh17cyber.github.io/excellsorted](https://abhisheksing
 ## Example Use Cases
 
 ### Business Analytics
+
 - **Input**: Sales data CSV file
 - **Instruction**: "Sort by region, create monthly trend charts, highlight top 10 performers"
 - **Output**: Organized Excel workbook with regional analysis, trend charts, and performance reports
 
 ### Financial Analysis
+
 - **Input**: Transaction data
 - **Instruction**: "Group by category, calculate monthly totals, identify unusual spending patterns"
 - **Output**: Financial summary with category breakdowns and anomaly detection
 
 ### Inventory Management
+
 - **Input**: Product inventory data
 - **Instruction**: "Sort by stock levels, create reorder alerts, generate supplier performance charts"
 - **Output**: Inventory dashboard with alerts and supplier analysis
@@ -113,12 +126,14 @@ Visit [https://abhisheksingh17cyber.github.io/excellsorted](https://abhisheksing
 ## API Endpoints
 
 ### Upload Files
+
 ```
 POST /api/upload
 Content-Type: multipart/form-data
 ```
 
 ### Process Data
+
 ```
 POST /api/process
 {
@@ -129,11 +144,13 @@ POST /api/process
 ```
 
 ### Get Status
+
 ```
 GET /api/status/:jobId
 ```
 
 ### Download Results
+
 ```
 GET /api/download/:jobId
 GET /api/download/:jobId/file/:filename
@@ -143,6 +160,7 @@ GET /api/download/:jobId/info
 ## Development
 
 ### Project Structure
+
 ```
 smart-data-organizer/
 ├── backend/              # Node.js API server
@@ -188,6 +206,7 @@ npm run test         # Run frontend tests
 ### Environment Variables
 
 Create `.env` file in the backend directory:
+
 ```env
 NODE_ENV=development
 PORT=5000
@@ -199,18 +218,22 @@ OUTPUT_DIR=./output
 ## Deployment
 
 ### GitHub Pages (Frontend Only)
+
 The frontend is automatically deployed to GitHub Pages when changes are pushed to the main branch.
 
 ### Full Stack Deployment
+
 For production deployment with backend:
 
 1. **Backend**: Deploy to platforms like:
+
    - Heroku
    - AWS EC2/ECS
    - Google Cloud Platform
    - DigitalOcean
 
 2. **Frontend**: Build and deploy to:
+
    - Netlify
    - Vercel
    - AWS S3 + CloudFront
@@ -236,6 +259,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Support
 
 For questions, issues, or feature requests:
+
 - 📧 Email: support@smartdataorganizer.com
 - 🐛 GitHub Issues: [Create an issue](https://github.com/Abhisheksingh17cyber/excellsorted/issues)
 - 📚 Documentation: [Wiki](https://github.com/Abhisheksingh17cyber/excellsorted/wiki)

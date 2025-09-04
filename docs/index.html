@@ -1,1 +1,165 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"/><link rel="icon" href="/excellsorted/favicon.ico"/><meta name="viewport" content="width=device-width,initial-scale=1"/><meta name="theme-color" content="#000000"/><meta name="description" content="Smart Data Organizer & Analyzer - Transform your raw data into organized Excel files with automated analysis and charts"/><link rel="apple-touch-icon" href="/excellsorted/logo192.png"/><link rel="manifest" href="/excellsorted/manifest.json"/><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap"/><link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/><title>Smart Data Organizer</title><script defer="defer" src="/excellsorted/static/js/main.0ff1f29c.js"></script></head><body><noscript>You need to enable JavaScript to run this app.</noscript><div id="root"></div></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Data Organizer & Analyzer</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-chart-line"></i>
+                <h1>Smart Data Organizer & Analyzer</h1>
+            </div>
+            <p class="subtitle">Upload raw data files and receive organized Excel files with automated analysis</p>
+        </header>
+
+        <main class="main-content">
+            <!-- Upload Section -->
+            <section class="upload-section" id="uploadSection">
+                <div class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <h2>Upload Your Data Files</h2>
+                    </div>
+                    <div class="upload-area" id="uploadArea">
+                        <i class="fas fa-file-upload"></i>
+                        <p>Drag & drop your files here or click to browse</p>
+                        <p class="file-types">Supports: CSV, Excel (.xlsx, .xls), JSON, TXT</p>
+                        <input type="file" id="fileInput" multiple accept=".csv,.xlsx,.xls,.json,.txt">
+                    </div>
+                    <div class="file-list" id="fileList"></div>
+                    <button class="btn-primary" id="uploadBtn" disabled>Upload Files</button>
+                </div>
+            </section>
+
+            <!-- Instructions Section -->
+            <section class="instructions-section" id="instructionsSection" style="display: none;">
+                <div class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-tasks"></i>
+                        <h2>Processing Instructions</h2>
+                    </div>
+                    <textarea 
+                        id="instructionsText" 
+                        placeholder="Describe what you want to do with your data in plain English...
+
+Examples:
+• Sort data by sales amount and create a monthly trend chart
+• Group customers by region and highlight top performers  
+• Calculate quarterly totals and create comparison charts
+• Identify outliers and create data quality report"
+                        rows="8">
+                    </textarea>
+                    <button class="btn-primary" id="processBtn">Process Data</button>
+                </div>
+            </section>
+
+            <!-- Processing Section -->
+            <section class="processing-section" id="processingSection" style="display: none;">
+                <div class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-cogs"></i>
+                        <h2>Processing Your Data</h2>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                        <div class="progress-text" id="progressText">Initializing...</div>
+                    </div>
+                    <div class="processing-steps" id="processingSteps">
+                        <div class="step" data-step="1">
+                            <i class="fas fa-search"></i>
+                            <span>Analyzing data structure</span>
+                        </div>
+                        <div class="step" data-step="2">
+                            <i class="fas fa-brain"></i>
+                            <span>Processing instructions</span>
+                        </div>
+                        <div class="step" data-step="3">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Generating visualizations</span>
+                        </div>
+                        <div class="step" data-step="4">
+                            <i class="fas fa-file-excel"></i>
+                            <span>Creating organized files</span>
+                        </div>
+                        <div class="step" data-step="5">
+                            <i class="fas fa-archive"></i>
+                            <span>Packaging results</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Results Section -->
+            <section class="results-section" id="resultsSection" style="display: none;">
+                <div class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-check-circle"></i>
+                        <h2>Processing Complete</h2>
+                    </div>
+                    <div class="results-summary" id="resultsSummary"></div>
+                    <div class="download-options" id="downloadOptions">
+                        <button class="btn-secondary" id="downloadAllBtn">
+                            <i class="fas fa-download"></i>
+                            Download Complete Package
+                        </button>
+                        <button class="btn-outline" id="viewDetailsBtn">
+                            <i class="fas fa-eye"></i>
+                            View Details
+                        </button>
+                        <button class="btn-outline" id="startOverBtn">
+                            <i class="fas fa-redo"></i>
+                            Start Over
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Features Section -->
+        <section class="features-section">
+            <h2>Key Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="fas fa-upload"></i>
+                    <h3>Multi-file Upload</h3>
+                    <p>Support for CSV, Excel, JSON, and TXT files</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-comments"></i>
+                    <h3>Natural Language</h3>
+                    <p>Describe what you want in plain English</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-chart-pie"></i>
+                    <h3>Auto Visualization</h3>
+                    <p>Generate charts and insights automatically</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-sort"></i>
+                    <h3>Smart Organization</h3>
+                    <p>Organize data into multiple sheets or files</p>
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <p>&copy; 2025 Smart Data Organizer & Analyzer. Made with ❤️ for data enthusiasts.</p>
+            <div class="footer-links">
+                <a href="https://github.com/Abhisheksingh17cyber/excellsorted" target="_blank">
+                    <i class="fab fa-github"></i> View on GitHub
+                </a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

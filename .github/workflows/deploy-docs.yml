@@ -1,0 +1,46 @@
+name: Deploy to GitHub Pages (Docs)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+
+      - name: Install dependencies
+        working-directory: ./smart-data-organizer/frontend
+        run: npm install
+
+      - name: Build application
+        working-directory: ./smart-data-organizer/frontend
+        run: npm run build
+
+      - name: Copy build files to docs
+        run: |
+          rm -rf docs
+          mkdir -p docs
+          cp -r smart-data-organizer/frontend/build/* docs/
+
+      - name: Commit and push docs
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add docs/
+          git commit -m "Deploy to GitHub Pages" || exit 0
+          git push

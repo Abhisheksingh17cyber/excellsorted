@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PowerPoint Pro - AI-Powered Presentation Generator</title>
+    <meta name="description" content="Create stunning, professional PowerPoint presentations in seconds with AI-powered content generation, smart image integration, and interactive features.">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Theme Toggle -->
+    <button id="themeToggle" class="theme-toggle" title="Toggle Dark/Light Mode">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-presentation"></i>
+                <span>PowerPoint Pro</span>
+            </div>
+            <div class="nav-menu" id="navMenu">
+                <a href="#home" class="nav-link active">Home</a>
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#templates" class="nav-link">Templates</a>
+                <a href="#about" class="nav-link">About</a>
+                <a href="#contact" class="nav-link">Contact</a>
+            </div>
+            <button class="nav-toggle" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-section">
+        <div class="hero-background">
+            <div class="floating-elements">
+                <div class="floating-element" style="--delay: 0s; --duration: 3s;"></div>
+                <div class="floating-element" style="--delay: 1s; --duration: 4s;"></div>
+                <div class="floating-element" style="--delay: 2s; --duration: 3.5s;"></div>
+            </div>
+        </div>
+        
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    Create <span class="gradient-text">Professional</span> Presentations
+                    <span class="typing-text">in Seconds</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Generate stunning PowerPoint presentations with AI-powered content, smart image integration, 
+                    and interactive features. Transform your ideas into compelling visual stories.
+                </p>
+                
+                <div class="hero-features">
+                    <div class="hero-feature">
+                        <i class="fas fa-robot"></i>
+                        <span>AI-Powered</span>
+                    </div>
+                    <div class="hero-feature">
+                        <i class="fas fa-images"></i>
+                        <span>Smart Images</span>
+                    </div>
+                    <div class="hero-feature">
+                        <i class="fas fa-bolt"></i>
+                        <span>Lightning Fast</span>
+                    </div>
+                </div>
+
+                <a href="#generator" class="cta-button primary">
+                    <i class="fas fa-magic"></i>
+                    Start Creating
+                    <span class="button-shine"></span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Presentation Generator -->
+    <section id="generator" class="generator-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Presentation Generator</h2>
+                <p>Enter your topic and let our AI create a professional presentation for you</p>
+            </div>
+
+            <div class="generator-container">
+                <!-- Input Panel -->
+                <div class="input-panel">
+                    <div class="input-group">
+                        <label for="topicInput" class="input-label">
+                            <i class="fas fa-lightbulb"></i>
+                            Presentation Topic
+                        </label>
+                        <div class="input-wrapper">
+                            <input 
+                                type="text" 
+                                id="topicInput" 
+                                class="topic-input" 
+                                placeholder="e.g., Climate Change, Digital Marketing, Machine Learning..."
+                                maxlength="100"
+                            >
+                            <span class="char-counter">0/100</span>
+                        </div>
+                    </div>
+
+                    <div class="settings-grid">
+                        <!-- Template Style -->
+                        <div class="setting-group">
+                            <label class="setting-label">
+                                <i class="fas fa-palette"></i>
+                                Template Style
+                            </label>
+                            <div class="template-options">
+                                <button class="template-option active" data-template="business">
+                                    <div class="template-preview business-preview"></div>
+                                    <span>Business</span>
+                                </button>
+                                <button class="template-option" data-template="academic">
+                                    <div class="template-preview academic-preview"></div>
+                                    <span>Academic</span>
+                                </button>
+                                <button class="template-option" data-template="creative">
+                                    <div class="template-preview creative-preview"></div>
+                                    <span>Creative</span>
+                                </button>
+                                <button class="template-option" data-template="minimal">
+                                    <div class="template-preview minimal-preview"></div>
+                                    <span>Minimal</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Color Scheme -->
+                        <div class="setting-group">
+                            <label class="setting-label">
+                                <i class="fas fa-paint-brush"></i>
+                                Color Scheme
+                            </label>
+                            <div class="color-options">
+                                <button class="color-option active" data-color="blue">
+                                    <div class="color-preview blue-scheme"></div>
+                                    <span>Professional Blue</span>
+                                </button>
+                                <button class="color-option" data-color="green">
+                                    <div class="color-preview green-scheme"></div>
+                                    <span>Nature Green</span>
+                                </button>
+                                <button class="color-option" data-color="purple">
+                                    <div class="color-preview purple-scheme"></div>
+                                    <span>Creative Purple</span>
+                                </button>
+                                <button class="color-option" data-color="orange">
+                                    <div class="color-preview orange-scheme"></div>
+                                    <span>Energy Orange</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Advanced Settings -->
+                        <div class="setting-group advanced-settings">
+                            <label class="setting-label">
+                                <i class="fas fa-cogs"></i>
+                                Advanced Options
+                            </label>
+                            <div class="advanced-options">
+                                <div class="option-row">
+                                    <label for="slideCount">Slide Count:</label>
+                                    <select id="slideCount">
+                                        <option value="10" selected>10 Slides</option>
+                                        <option value="15">15 Slides</option>
+                                        <option value="20">20 Slides</option>
+                                        <option value="25">25 Slides</option>
+                                        <option value="30">30 Slides</option>
+                                    </select>
+                                </div>
+                                <div class="option-row">
+                                    <label for="includeImages">
+                                        <input type="checkbox" id="includeImages" checked>
+                                        Include Smart Images
+                                    </label>
+                                </div>
+                                <div class="option-row">
+                                    <label for="includeCharts">
+                                        <input type="checkbox" id="includeCharts" checked>
+                                        Generate Charts
+                                    </label>
+                                </div>
+                                <div class="option-row">
+                                    <label for="speakerNotes">
+                                        <input type="checkbox" id="speakerNotes" checked>
+                                        Speaker Notes
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button id="generateBtn" class="generate-button">
+                        <span class="button-content">
+                            <i class="fas fa-magic"></i>
+                            Generate Presentation
+                        </span>
+                        <div class="loading-spinner">
+                            <div class="spinner"></div>
+                            <span>Generating...</span>
+                        </div>
+                    </button>
+                </div>
+
+                <!-- Progress Panel -->
+                <div class="progress-panel" id="progressPanel" style="display: none;">
+                    <h3>Generating Your Presentation</h3>
+                    <div class="progress-steps">
+                        <div class="progress-step active" data-step="1">
+                            <i class="fas fa-search"></i>
+                            <span>Researching Content</span>
+                        </div>
+                        <div class="progress-step" data-step="2">
+                            <i class="fas fa-edit"></i>
+                            <span>Creating Slides</span>
+                        </div>
+                        <div class="progress-step" data-step="3">
+                            <i class="fas fa-images"></i>
+                            <span>Adding Images</span>
+                        </div>
+                        <div class="progress-step" data-step="4">
+                            <i class="fas fa-check"></i>
+                            <span>Finalizing</span>
+                        </div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <p class="progress-text" id="progressText">Analyzing your topic...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Presentation Viewer -->
+    <section id="presentationViewer" class="presentation-viewer" style="display: none;">
+        <div class="viewer-container">
+            <div class="viewer-header">
+                <h2 id="presentationTitle">Your Presentation</h2>
+                <div class="viewer-controls">
+                    <button id="fullscreenBtn" class="control-btn" title="Fullscreen">
+                        <i class="fas fa-expand"></i>
+                    </button>
+                    <button id="playBtn" class="control-btn" title="Play Slideshow">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <button id="settingsBtn" class="control-btn" title="Settings">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="viewer-content">
+                <!-- Slide Navigator -->
+                <div class="slide-navigator">
+                    <div class="navigator-header">
+                        <span>Slides</span>
+                        <span id="slideCounter">1 / 10</span>
+                    </div>
+                    <div class="slide-thumbnails" id="slideThumbnails">
+                        <!-- Thumbnails will be generated here -->
+                    </div>
+                </div>
+
+                <!-- Main Slide Display -->
+                <div class="slide-display">
+                    <div class="slide-container" id="slideContainer">
+                        <!-- Current slide content -->
+                    </div>
+                    
+                    <!-- Slide Controls -->
+                    <div class="slide-controls">
+                        <button id="prevSlide" class="slide-nav-btn">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <div class="slide-progress">
+                            <div class="progress-dots" id="progressDots">
+                                <!-- Progress dots will be generated here -->
+                            </div>
+                        </div>
+                        <button id="nextSlide" class="slide-nav-btn">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Speaker Notes Panel -->
+                <div class="speaker-notes" id="speakerNotesPanel">
+                    <div class="notes-header">
+                        <i class="fas fa-sticky-note"></i>
+                        <span>Speaker Notes</span>
+                        <button id="toggleNotes" class="toggle-btn">
+                            <i class="fas fa-eye-slash"></i>
+                        </button>
+                    </div>
+                    <div class="notes-content" id="speakerNotesContent">
+                        <!-- Speaker notes will be displayed here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Download Options -->
+            <div class="download-section">
+                <h3>Download Your Presentation</h3>
+                <div class="download-options">
+                    <button class="download-btn primary" id="downloadPPT">
+                        <i class="fas fa-file-powerpoint"></i>
+                        <span>Download PPT</span>
+                    </button>
+                    <button class="download-btn secondary" id="downloadPDF">
+                        <i class="fas fa-file-pdf"></i>
+                        <span>Download PDF</span>
+                    </button>
+                    <button class="download-btn secondary" id="downloadImages">
+                        <i class="fas fa-images"></i>
+                        <span>Download Images</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Powerful Features</h2>
+                <p>Everything you need to create professional presentations</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3>AI-Powered Content</h3>
+                    <p>Intelligent content generation based on your topic with relevant insights and key points.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-palette"></i>
+                    </div>
+                    <h3>Professional Templates</h3>
+                    <p>Choose from business, academic, creative, and minimal templates designed by professionals.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-images"></i>
+                    </div>
+                    <h3>Smart Imagery</h3>
+                    <p>Automatically sourced high-quality images that perfectly match your presentation topic.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <h3>Dynamic Charts</h3>
+                    <p>Generate interactive charts and graphs to visualize your data effectively.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>Mobile Friendly</h3>
+                    <p>Create and preview presentations on any device with our responsive design.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>Lightning Fast</h3>
+                    <p>Generate professional presentations in under 10 seconds with our optimized engine.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Templates Showcase -->
+    <section id="templates" class="templates-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Template Gallery</h2>
+                <p>Preview our professional template designs</p>
+            </div>
+
+            <div class="template-gallery">
+                <div class="template-showcase business-template active">
+                    <div class="template-preview-large">
+                        <h3>Business Professional</h3>
+                        <p>Clean, corporate design perfect for business presentations</p>
+                    </div>
+                </div>
+                
+                <div class="template-showcase academic-template">
+                    <div class="template-preview-large">
+                        <h3>Academic Research</h3>
+                        <p>Scholarly design ideal for research and educational content</p>
+                    </div>
+                </div>
+                
+                <div class="template-showcase creative-template">
+                    <div class="template-preview-large">
+                        <h3>Creative Modern</h3>
+                        <p>Bold, artistic design for creative and marketing presentations</p>
+                    </div>
+                </div>
+                
+                <div class="template-showcase minimal-template">
+                    <div class="template-preview-large">
+                        <h3>Minimal Clean</h3>
+                        <p>Simple, elegant design focusing on content clarity</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about-section">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>About PowerPoint Pro</h2>
+                    <p>PowerPoint Pro is an advanced AI-powered presentation generator that transforms your ideas into professional, visually stunning presentations in seconds.</p>
+                    <p>Our platform combines cutting-edge artificial intelligence with professional design principles to create presentations that engage your audience and communicate your message effectively.</p>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <h3>10K+</h3>
+                            <p>Presentations Created</p>
+                        </div>
+                        <div class="stat-item">
+                            <h3>50+</h3>
+                            <p>Template Designs</p>
+                        </div>
+                        <div class="stat-item">
+                            <h3>99.9%</h3>
+                            <p>Uptime</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-visual">
+                    <div class="visual-element"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Get in Touch</h2>
+                <p>Have questions or need support? We're here to help!</p>
+            </div>
+
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <h4>Email</h4>
+                            <p>support@powerpointpro.com</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-github"></i>
+                        <div>
+                            <h4>GitHub</h4>
+                            <p>github.com/powerpointpro</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <form class="contact-form">
+                    <div class="form-group">
+                        <input type="text" placeholder="Your Name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" placeholder="Your Email" required>
+                    </div>
+                    <div class="form-group">
+                        <textarea placeholder="Your Message" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-paper-plane"></i>
+                        Send Message
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-brand">
+                        <i class="fas fa-presentation"></i>
+                        <span>PowerPoint Pro</span>
+                    </div>
+                    <p>Create professional presentations instantly with AI-powered content generation.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Features</h4>
+                    <ul>
+                        <li><a href="#features">AI Content Generation</a></li>
+                        <li><a href="#templates">Professional Templates</a></li>
+                        <li><a href="#features">Smart Image Integration</a></li>
+                        <li><a href="#features">Multiple Export Formats</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#about">Documentation</a></li>
+                        <li><a href="#contact">Support</a></li>
+                        <li><a href="#">API Reference</a></li>
+                        <li><a href="#">GitHub Repository</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Connect</h4>
+                    <div class="social-links">
+                        <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
+                        <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 PowerPoint Pro. Open source project for educational purposes.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Presentation Settings</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="setting-item">
+                    <label>Auto-advance slides</label>
+                    <input type="checkbox" id="autoAdvance">
+                </div>
+                <div class="setting-item">
+                    <label>Advance interval (seconds)</label>
+                    <input type="range" id="advanceInterval" min="3" max="30" value="10">
+                    <span id="intervalDisplay">10s</span>
+                </div>
+                <div class="setting-item">
+                    <label>Show speaker notes</label>
+                    <input type="checkbox" id="showNotes" checked>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>

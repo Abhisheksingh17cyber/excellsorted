@@ -1,74 +1,79 @@
-// Smart Data Organizer JavaScript
 class SmartDataOrganizer {
     constructor() {
-        this.uploadedFiles = [];
+        this.files = [];
         this.currentStep = 1;
-        this.processing = false;
-        this.init();
+        this.processingSteps = [
+            'Analyzing data structure...',
+            'Processing instructions...',
+            'Generating visualizations...',
+            'Creating organized files...',
+            'Packaging results...'
+        ];
+        
+        this.initializeEventListeners();
     }
 
-    init() {
-        this.setupEventListeners();
-        this.setupDragAndDrop();
-    }
-
-    setupEventListeners() {
+    initializeEventListeners() {
+        // File upload functionality
         const fileInput = document.getElementById('fileInput');
         const uploadArea = document.getElementById('uploadArea');
+        const uploadBtn = document.getElementById('uploadBtn');
+
+        // Drag and drop events
+        uploadArea.addEventListener('dragover', this.handleDragOver.bind(this));
+        uploadArea.addEventListener('dragleave', this.handleDragLeave.bind(this));
+        uploadArea.addEventListener('drop', this.handleDrop.bind(this));
+        uploadArea.addEventListener('click', () => fileInput.click());
+
+        // File selection
+        fileInput.addEventListener('change', this.handleFileSelect.bind(this));
+
+        // Button events
+        uploadBtn.addEventListener('click', this.handleUpload.bind(this));
         
-        // File input change
-        fileInput.addEventListener('change', (e) => {
-            this.handleFiles(e.target.files);
-        });
-
-        // Upload area click
-        uploadArea.addEventListener('click', () => {
-            fileInput.click();
-        });
+        document.getElementById('processBtn').addEventListener('click', this.handleProcess.bind(this));
+        document.getElementById('downloadAllBtn').addEventListener('click', this.handleDownloadAll.bind(this));
+        document.getElementById('viewDetailsBtn').addEventListener('click', this.handleViewDetails.bind(this));
+        document.getElementById('startOverBtn').addEventListener('click', this.handleStartOver.bind(this));
     }
 
-    setupDragAndDrop() {
-        const uploadArea = document.getElementById('uploadArea');
-
-        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            uploadArea.addEventListener(eventName, this.preventDefaults, false);
-            document.body.addEventListener(eventName, this.preventDefaults, false);
-        });
-
-        ['dragenter', 'dragover'].forEach(eventName => {
-            uploadArea.addEventListener(eventName, () => {
-                uploadArea.classList.add('dragover');
-            });
-        });
-
-        ['dragleave', 'drop'].forEach(eventName => {
-            uploadArea.addEventListener(eventName, () => {
-                uploadArea.classList.remove('dragover');
-            });
-        });
-
-        uploadArea.addEventListener('drop', (e) => {
-            const files = e.dataTransfer.files;
-            this.handleFiles(files);
-        });
-    }
-
-    preventDefaults(e) {
+    handleDragOver(e) {
         e.preventDefault();
         e.stopPropagation();
+        document.getElementById('uploadArea').classList.add('drag-over');
     }
 
-    handleFiles(files) {
-        const fileArray = Array.from(files);
-        const validFiles = fileArray.filter(file => this.isValidFileType(file));
+    handleDragLeave(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        document.getElementById('uploadArea').classList.remove('drag-over');
+    }
+
+    handleDrop(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        document.getElementById('uploadArea').classList.remove('drag-over');
         
-        if (validFiles.length !== fileArray.length) {
-            this.showAlert('Some files were skipped. Only CSV, Excel, JSON, and TXT files are supported.', 'warning');
+        const files = Array.from(e.dataTransfer.files);
+        this.addFiles(files);
+    }
+
+    handleFileSelect(e) {
+        const files = Array.from(e.target.files);
+        this.addFiles(files);
+    }
+
+    addFiles(files) {
+        const validFiles = files.filter(file => this.isValidFileType(file));
+        
+        if (validFiles.length === 0) {
+            this.showNotification('Please select valid file types (CSV, Excel, JSON, TXT)', 'error');
+            return;
         }
 
-        this.uploadedFiles = [...this.uploadedFiles, ...validFiles];
-        this.displayFileList();
-        this.updateProcessButton();
+        this.files = [...this.files, ...validFiles];
+        this.renderFileList();
+        this.updateUploadButton();
     }
 
     isValidFileType(file) {
@@ -86,53 +91,40 @@ class SmartDataOrganizer {
                validExtensions.some(ext => file.name.toLowerCase().endsWith(ext));
     }
 
-    displayFileList() {
+    renderFileList() {
         const fileList = document.getElementById('fileList');
         
-        if (this.uploadedFiles.length === 0) {
+        if (this.files.length === 0) {
             fileList.innerHTML = '';
             return;
         }
 
-        const html = this.uploadedFiles.map((file, index) => `
-            <div class="file-item d-flex justify-content-between align-items-center">
-                <div class="d-flex align-items-center">
-                    <div class="file-icon ${this.getFileExtension(file.name)}">
-                        ${this.getFileIcon(file.name)}
-                    </div>
-                    <div>
-                        <div class="fw-bold">${file.name}</div>
+        fileList.innerHTML = this.files.map((file, index) => `
+            <div class="file-item fade-in">
+                <div class="file-info">
+                    <i class="fas ${this.getFileIcon(file)}"></i>
+                    <div class="file-details">
+                        <div class="file-name">${file.name}</div>
                         <div class="file-size">${this.formatFileSize(file.size)}</div>
                     </div>
                 </div>
-                <button class="btn btn-sm btn-outline-danger" onclick="app.removeFile(${index})">
-                    <i class="bi bi-x"></i>
+                <button class="remove-file" onclick="dataOrganizer.removeFile(${index})">
+                    <i class="fas fa-times"></i>
                 </button>
             </div>
         `).join('');
-
-        fileList.innerHTML = `
-            <div class="mt-3">
-                <h6><i class="bi bi-files"></i> Uploaded Files (${this.uploadedFiles.length}):</h6>
-                ${html}
-            </div>
-        `;
     }
 
-    getFileExtension(filename) {
-        return filename.split('.').pop().toLowerCase();
-    }
-
-    getFileIcon(filename) {
-        const ext = this.getFileExtension(filename);
-        const icons = {
-            csv: '<i class="bi bi-file-earmark-text"></i>',
-            xlsx: '<i class="bi bi-file-earmark-spreadsheet"></i>',
-            xls: '<i class="bi bi-file-earmark-spreadsheet"></i>',
-            json: '<i class="bi bi-file-earmark-code"></i>',
-            txt: '<i class="bi bi-file-earmark-text"></i>'
-        };
-        return icons[ext] || '<i class="bi bi-file-earmark"></i>';
+    getFileIcon(file) {
+        const extension = file.name.split('.').pop().toLowerCase();
+        switch (extension) {
+            case 'csv': return 'fa-file-csv';
+            case 'xlsx':
+            case 'xls': return 'fa-file-excel';
+            case 'json': return 'fa-file-code';
+            case 'txt': return 'fa-file-alt';
+            default: return 'fa-file';
+        }
     }
 
     formatFileSize(bytes) {
@@ -144,261 +136,280 @@ class SmartDataOrganizer {
     }
 
     removeFile(index) {
-        this.uploadedFiles.splice(index, 1);
-        this.displayFileList();
-        this.updateProcessButton();
+        this.files.splice(index, 1);
+        this.renderFileList();
+        this.updateUploadButton();
     }
 
-    updateProcessButton() {
-        const processBtn = document.getElementById('processBtn');
-        const hasFiles = this.uploadedFiles.length > 0;
+    updateUploadButton() {
+        const uploadBtn = document.getElementById('uploadBtn');
+        uploadBtn.disabled = this.files.length === 0;
+    }
+
+    handleUpload() {
+        if (this.files.length === 0) return;
+
+        this.showSection('instructionsSection');
+        this.showNotification('Files uploaded successfully! Please provide processing instructions.', 'success');
+    }
+
+    handleProcess() {
+        const instructions = document.getElementById('instructionsText').value.trim();
         
-        processBtn.disabled = !hasFiles || this.processing;
-        processBtn.innerHTML = hasFiles 
-            ? '<i class="bi bi-gear-fill"></i> Process Data'
-            : '<i class="bi bi-exclamation-triangle"></i> Upload files first';
+        if (!instructions) {
+            this.showNotification('Please provide processing instructions.', 'error');
+            return;
+        }
+
+        this.showSection('processingSection');
+        this.startProcessing();
     }
 
-    showAlert(message, type = 'info') {
-        const alertDiv = document.createElement('div');
-        alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
-        alertDiv.innerHTML = `
-            ${message}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    startProcessing() {
+        this.currentStep = 1;
+        const progressFill = document.getElementById('progressFill');
+        const progressText = document.getElementById('progressText');
+        
+        // Reset steps
+        document.querySelectorAll('.step').forEach(step => {
+            step.classList.remove('active', 'completed');
+        });
+
+        const processStep = (step) => {
+            if (step > this.processingSteps.length) {
+                this.completeProcessing();
+                return;
+            }
+
+            // Update progress
+            const progress = (step / this.processingSteps.length) * 100;
+            progressFill.style.width = `${progress}%`;
+            progressText.textContent = this.processingSteps[step - 1];
+
+            // Update step visual
+            const stepElement = document.querySelector(`[data-step="${step}"]`);
+            if (stepElement) {
+                stepElement.classList.add('active');
+            }
+
+            // Complete previous steps
+            for (let i = 1; i < step; i++) {
+                const prevStep = document.querySelector(`[data-step="${i}"]`);
+                if (prevStep) {
+                    prevStep.classList.remove('active');
+                    prevStep.classList.add('completed');
+                }
+            }
+
+            // Simulate processing time
+            const delay = Math.random() * 2000 + 1000; // 1-3 seconds
+            setTimeout(() => processStep(step + 1), delay);
+        };
+
+        processStep(1);
+    }
+
+    completeProcessing() {
+        // Complete final step
+        const finalStep = document.querySelector(`[data-step="${this.processingSteps.length}"]`);
+        if (finalStep) {
+            finalStep.classList.remove('active');
+            finalStep.classList.add('completed');
+        }
+
+        // Show results
+        setTimeout(() => {
+            this.showSection('resultsSection');
+            this.generateResults();
+        }, 1000);
+    }
+
+    generateResults() {
+        const resultsSummary = document.getElementById('resultsSummary');
+        const instructions = document.getElementById('instructionsText').value;
+        
+        const mockResults = {
+            filesProcessed: this.files.length,
+            sheetsCreated: Math.floor(Math.random() * 5) + 2,
+            chartsGenerated: Math.floor(Math.random() * 3) + 1,
+            recordsAnalyzed: Math.floor(Math.random() * 10000) + 1000,
+            processingTime: Math.floor(Math.random() * 30) + 10
+        };
+
+        resultsSummary.innerHTML = `
+            <div class="fade-in">
+                <h3><i class="fas fa-check-circle" style="color: var(--success-color); margin-right: 10px;"></i>Processing Summary</h3>
+                <div style="margin: 20px 0; display: grid; gap: 15px;">
+                    <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border-color);">
+                        <span><i class="fas fa-file" style="margin-right: 8px;"></i>Files Processed:</span>
+                        <strong>${mockResults.filesProcessed}</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border-color);">
+                        <span><i class="fas fa-table" style="margin-right: 8px;"></i>Sheets Created:</span>
+                        <strong>${mockResults.sheetsCreated}</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border-color);">
+                        <span><i class="fas fa-chart-bar" style="margin-right: 8px;"></i>Charts Generated:</span>
+                        <strong>${mockResults.chartsGenerated}</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border-color);">
+                        <span><i class="fas fa-database" style="margin-right: 8px;"></i>Records Analyzed:</span>
+                        <strong>${mockResults.recordsAnalyzed.toLocaleString()}</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 10px 0;">
+                        <span><i class="fas fa-clock" style="margin-right: 8px;"></i>Processing Time:</span>
+                        <strong>${mockResults.processingTime} seconds</strong>
+                    </div>
+                </div>
+                <div style="background: rgba(76, 175, 80, 0.1); padding: 15px; border-radius: 8px; margin-top: 20px;">
+                    <p><strong>Instructions Applied:</strong></p>
+                    <p style="font-style: italic; color: var(--text-secondary); margin-top: 5px;">"${instructions}"</p>
+                </div>
+            </div>
+        `;
+    }
+
+    handleDownloadAll() {
+        this.showNotification('Downloading complete package...', 'success');
+        // In a real implementation, this would trigger the actual download
+        this.simulateDownload('smart-data-organizer-results.zip');
+    }
+
+    handleViewDetails() {
+        this.showNotification('Opening detailed results...', 'info');
+        // In a real implementation, this would show detailed analysis results
+    }
+
+    handleStartOver() {
+        this.files = [];
+        this.currentStep = 1;
+        document.getElementById('instructionsText').value = '';
+        document.getElementById('fileList').innerHTML = '';
+        this.updateUploadButton();
+        this.showSection('uploadSection');
+        this.showNotification('Ready for new data processing!', 'info');
+    }
+
+    simulateDownload(filename) {
+        // Create a mock download
+        const link = document.createElement('a');
+        link.href = 'data:text/plain;charset=utf-8,Mock download - ' + filename;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    showSection(sectionId) {
+        // Hide all sections
+        const sections = ['uploadSection', 'instructionsSection', 'processingSection', 'resultsSection'];
+        sections.forEach(id => {
+            document.getElementById(id).style.display = 'none';
+        });
+        
+        // Show target section
+        const targetSection = document.getElementById(sectionId);
+        targetSection.style.display = 'block';
+        targetSection.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    showNotification(message, type = 'info') {
+        // Create notification element
+        const notification = document.createElement('div');
+        notification.className = `notification notification-${type}`;
+        notification.innerHTML = `
+            <i class="fas ${this.getNotificationIcon(type)}"></i>
+            <span>${message}</span>
         `;
         
-        document.querySelector('.container').insertBefore(alertDiv, document.querySelector('.container').firstChild);
+        // Style the notification
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: ${this.getNotificationColor(type)};
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: var(--shadow-hover);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+            max-width: 400px;
+            animation: slideIn 0.3s ease-out;
+        `;
         
+        document.body.appendChild(notification);
+        
+        // Auto remove after 4 seconds
         setTimeout(() => {
-            if (alertDiv.parentNode) {
-                alertDiv.remove();
-            }
-        }, 5000);
-    }
-}
-
-// Processing functions
-function startProcessing() {
-    if (app.uploadedFiles.length === 0) {
-        app.showAlert('Please upload at least one file before processing.', 'warning');
-        return;
-    }
-
-    const instructions = document.getElementById('instructions').value.trim();
-    if (!instructions) {
-        app.showAlert('Please provide processing instructions.', 'warning');
-        return;
-    }
-
-    app.processing = true;
-    app.updateProcessButton();
-
-    // Show processing section
-    document.getElementById('processing').style.display = 'block';
-    document.getElementById('processing').scrollIntoView({ behavior: 'smooth' });
-
-    // Simulate processing steps
-    simulateProcessing();
-}
-
-function simulateProcessing() {
-    const steps = [
-        { id: 'step1', text: 'Analyzing file structure and data types...', duration: 2000 },
-        { id: 'step2', text: 'Processing natural language instructions...', duration: 3000 },
-        { id: 'step3', text: 'Applying data transformations and calculations...', duration: 4000 },
-        { id: 'step4', text: 'Generating charts and visualizations...', duration: 3000 },
-        { id: 'step5', text: 'Compiling final reports and organizing files...', duration: 2000 }
-    ];
-
-    let currentStep = 0;
-    let progress = 0;
-    const totalDuration = steps.reduce((sum, step) => sum + step.duration, 0);
-
-    function processStep() {
-        if (currentStep < steps.length) {
-            const step = steps[currentStep];
-            
-            // Update step status
-            const stepElement = document.getElementById(step.id);
-            stepElement.classList.add('active');
-            stepElement.innerHTML = `<i class="bi bi-hourglass-split"></i> ${step.text}`;
-            
-            // Update status text
-            document.getElementById('statusText').textContent = step.text;
-            
-            // Update progress
-            progress = ((currentStep + 1) / steps.length) * 100;
-            const progressBar = document.getElementById('progressBar');
-            progressBar.style.width = `${progress}%`;
-            progressBar.textContent = `${Math.round(progress)}%`;
-            
+            notification.style.animation = 'fadeOut 0.3s ease-out forwards';
             setTimeout(() => {
-                // Mark step as completed
-                stepElement.classList.remove('active');
-                stepElement.classList.add('completed');
-                stepElement.innerHTML = `<i class="bi bi-check-circle-fill"></i> ${step.text.replace('...', ' - Completed')}`;
-                
-                currentStep++;
-                processStep();
-            }, step.duration);
-        } else {
-            // Processing complete
-            completeProcessing();
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 300);
+        }, 4000);
+    }
+
+    getNotificationIcon(type) {
+        switch (type) {
+            case 'success': return 'fa-check-circle';
+            case 'error': return 'fa-exclamation-circle';
+            case 'warning': return 'fa-exclamation-triangle';
+            default: return 'fa-info-circle';
         }
     }
 
-    processStep();
-}
-
-function completeProcessing() {
-    app.processing = false;
-    app.updateProcessButton();
-    
-    // Update final status
-    document.getElementById('statusText').textContent = 'Processing completed successfully!';
-    const progressBar = document.getElementById('progressBar');
-    progressBar.classList.remove('progress-bar-striped', 'progress-bar-animated');
-    progressBar.classList.add('bg-success');
-    
-    // Show results section
-    setTimeout(() => {
-        document.getElementById('download').style.display = 'block';
-        document.getElementById('download').scrollIntoView({ behavior: 'smooth' });
-        
-        // Generate preview chart
-        generatePreviewChart();
-    }, 1000);
-}
-
-function generatePreviewChart() {
-    const ctx = document.getElementById('previewChart').getContext('2d');
-    
-    // Sample data for demonstration
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-            datasets: [{
-                label: 'Monthly Sales',
-                data: [12000, 19000, 15000, 25000, 22000, 30000],
-                backgroundColor: [
-                    'rgba(13, 110, 253, 0.8)',
-                    'rgba(25, 135, 84, 0.8)',
-                    'rgba(255, 193, 7, 0.8)',
-                    'rgba(220, 53, 69, 0.8)',
-                    'rgba(13, 202, 240, 0.8)',
-                    'rgba(111, 66, 193, 0.8)'
-                ],
-                borderColor: [
-                    'rgba(13, 110, 253, 1)',
-                    'rgba(25, 135, 84, 1)',
-                    'rgba(255, 193, 7, 1)',
-                    'rgba(220, 53, 69, 1)',
-                    'rgba(13, 202, 240, 1)',
-                    'rgba(111, 66, 193, 1)'
-                ],
-                borderWidth: 2
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    display: false
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        callback: function(value) {
-                            return '$' + value.toLocaleString();
-                        }
-                    }
-                }
-            }
+    getNotificationColor(type) {
+        switch (type) {
+            case 'success': return 'var(--success-color)';
+            case 'error': return 'var(--error-color)';
+            case 'warning': return 'var(--warning-color)';
+            default: return 'var(--primary-color)';
         }
-    });
+    }
 }
 
-function setInstruction(text) {
-    document.getElementById('instructions').value = text;
-}
+// Initialize the application
+const dataOrganizer = new SmartDataOrganizer();
 
-function resetApp() {
-    // Reset application state
-    app.uploadedFiles = [];
-    app.processing = false;
-    app.currentStep = 1;
-    
-    // Clear form
-    document.getElementById('instructions').value = '';
-    document.getElementById('fileInput').value = '';
-    
-    // Hide sections
-    document.getElementById('processing').style.display = 'none';
-    document.getElementById('download').style.display = 'none';
-    
-    // Reset file list
-    app.displayFileList();
-    app.updateProcessButton();
-    
-    // Scroll to top
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    
-    // Reset steps
-    ['step1', 'step2', 'step3', 'step4', 'step5'].forEach(id => {
-        const element = document.getElementById(id);
-        element.classList.remove('active', 'completed');
-        element.innerHTML = `<i class="bi bi-clock"></i> ${element.textContent.split(' - ')[0]}`;
-    });
-    
-    // Reset progress bar
-    const progressBar = document.getElementById('progressBar');
-    progressBar.style.width = '0%';
-    progressBar.textContent = '0%';
-    progressBar.classList.add('progress-bar-striped', 'progress-bar-animated');
-    progressBar.classList.remove('bg-success');
-}
-
-// Initialize app when DOM is loaded
-let app;
+// Add some demo functionality
 document.addEventListener('DOMContentLoaded', function() {
-    app = new SmartDataOrganizer();
-});
+    // Add animation to feature cards
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
 
-// Smooth scrolling for navigation
-document.addEventListener('DOMContentLoaded', function() {
-    // Add smooth scrolling to navigation links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                target.scrollIntoView({
-                    behavior: 'smooth'
-                });
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.animationDelay = Math.random() * 0.5 + 's';
+                entry.target.classList.add('fade-in');
             }
         });
+    }, observerOptions);
+
+    document.querySelectorAll('.feature-card').forEach(card => {
+        observer.observe(card);
     });
 });
 
-// Download simulation functions
-function simulateDownload(filename) {
-    app.showAlert(`Downloading ${filename}... (This is a demo - actual file generation would happen on the server)`, 'info');
+// Add fadeOut animation to CSS if not already present
+const style = document.createElement('style');
+style.textContent = `
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
 }
-
-// Add click handlers to download buttons
-document.addEventListener('DOMContentLoaded', function() {
-    // This will run after the DOM is loaded
-    setTimeout(() => {
-        const downloadButtons = document.querySelectorAll('#resultFiles .btn');
-        downloadButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const fileName = this.closest('.list-group-item').querySelector('strong').textContent;
-                simulateDownload(fileName);
-            });
-        });
-    }, 100);
-});
+`;
+document.head.appendChild(style);

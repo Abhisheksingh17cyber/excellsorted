@@ -4,261 +4,162 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smart Data Organizer & Analyzer</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container">
-            <a class="navbar-brand" href="#"><i class="bi bi-file-spreadsheet"></i> Smart Data Organizer</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#upload">Upload</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#analyze">Analyze</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#download">Download</a>
-                    </li>
-                </ul>
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-chart-line"></i>
+                <h1>Smart Data Organizer & Analyzer</h1>
             </div>
-        </div>
-    </nav>
+            <p class="subtitle">Upload raw data files and receive organized Excel files with automated analysis</p>
+        </header>
 
-    <div class="container mt-4">
-        <!-- Hero Section -->
-        <div class="row mb-5">
-            <div class="col-lg-8 mx-auto text-center">
-                <h1 class="display-4 text-primary mb-4">Smart Data Organizer & Analyzer</h1>
-                <p class="lead">Transform your raw data files into organized, analyzed Excel reports with automated insights and visualizations using natural language instructions.</p>
-                <div class="alert alert-info">
-                    <i class="bi bi-info-circle"></i> Currently in demo mode. Upload functionality shows preview of features.
+        <main class="main-content">
+            <!-- Upload Section -->
+            <section class="upload-section" id="uploadSection">
+                <div class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <h2>Upload Your Data Files</h2>
+                    </div>
+                    <div class="upload-area" id="uploadArea">
+                        <i class="fas fa-file-upload"></i>
+                        <p>Drag & drop your files here or click to browse</p>
+                        <p class="file-types">Supports: CSV, Excel (.xlsx, .xls), JSON, TXT</p>
+                        <input type="file" id="fileInput" multiple accept=".csv,.xlsx,.xls,.json,.txt">
+                    </div>
+                    <div class="file-list" id="fileList"></div>
+                    <button class="btn-primary" id="uploadBtn" disabled>Upload Files</button>
                 </div>
-            </div>
-        </div>
+            </section>
 
-        <!-- Upload Section -->
-        <section id="upload" class="mb-5">
-            <div class="row">
-                <div class="col-lg-8 mx-auto">
-                    <div class="card shadow">
-                        <div class="card-header bg-primary text-white">
-                            <h3 class="card-title mb-0"><i class="bi bi-cloud-upload"></i> Step 1: Upload Your Data Files</h3>
+            <!-- Instructions Section -->
+            <section class="instructions-section" id="instructionsSection" style="display: none;">
+                <div class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-tasks"></i>
+                        <h2>Processing Instructions</h2>
+                    </div>
+                    <textarea 
+                        id="instructionsText" 
+                        placeholder="Describe what you want to do with your data in plain English...
+
+Examples:
+• Sort data by sales amount and create a monthly trend chart
+• Group customers by region and highlight top performers  
+• Calculate quarterly totals and create comparison charts
+• Identify outliers and create data quality report"
+                        rows="8">
+                    </textarea>
+                    <button class="btn-primary" id="processBtn">Process Data</button>
+                </div>
+            </section>
+
+            <!-- Processing Section -->
+            <section class="processing-section" id="processingSection" style="display: none;">
+                <div class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-cogs"></i>
+                        <h2>Processing Your Data</h2>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
                         </div>
-                        <div class="card-body">
-                            <div class="upload-area border-dashed p-5 text-center" id="uploadArea">
-                                <i class="bi bi-file-earmark-arrow-up display-1 text-muted mb-3"></i>
-                                <h5>Drag & Drop Files Here</h5>
-                                <p class="text-muted">or click to select files</p>
-                                <input type="file" id="fileInput" multiple accept=".csv,.xlsx,.xls,.json,.txt" class="d-none">
-                                <button class="btn btn-outline-primary" onclick="document.getElementById('fileInput').click()">
-                                    <i class="bi bi-folder2-open"></i> Select Files
-                                </button>
-                            </div>
-                            <div class="mt-3">
-                                <small class="text-muted">
-                                    <i class="bi bi-check-circle-fill text-success"></i> Supported formats: CSV, Excel (.xlsx, .xls), JSON, TXT
-                                </small>
-                            </div>
-                            <div id="fileList" class="mt-3"></div>
+                        <div class="progress-text" id="progressText">Initializing...</div>
+                    </div>
+                    <div class="processing-steps" id="processingSteps">
+                        <div class="step" data-step="1">
+                            <i class="fas fa-search"></i>
+                            <span>Analyzing data structure</span>
+                        </div>
+                        <div class="step" data-step="2">
+                            <i class="fas fa-brain"></i>
+                            <span>Processing instructions</span>
+                        </div>
+                        <div class="step" data-step="3">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Generating visualizations</span>
+                        </div>
+                        <div class="step" data-step="4">
+                            <i class="fas fa-file-excel"></i>
+                            <span>Creating organized files</span>
+                        </div>
+                        <div class="step" data-step="5">
+                            <i class="fas fa-archive"></i>
+                            <span>Packaging results</span>
                         </div>
                     </div>
+                </div>
+            </section>
+
+            <!-- Results Section -->
+            <section class="results-section" id="resultsSection" style="display: none;">
+                <div class="section-card">
+                    <div class="section-header">
+                        <i class="fas fa-check-circle"></i>
+                        <h2>Processing Complete</h2>
+                    </div>
+                    <div class="results-summary" id="resultsSummary"></div>
+                    <div class="download-options" id="downloadOptions">
+                        <button class="btn-secondary" id="downloadAllBtn">
+                            <i class="fas fa-download"></i>
+                            Download Complete Package
+                        </button>
+                        <button class="btn-outline" id="viewDetailsBtn">
+                            <i class="fas fa-eye"></i>
+                            View Details
+                        </button>
+                        <button class="btn-outline" id="startOverBtn">
+                            <i class="fas fa-redo"></i>
+                            Start Over
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Features Section -->
+        <section class="features-section">
+            <h2>Key Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="fas fa-upload"></i>
+                    <h3>Multi-file Upload</h3>
+                    <p>Support for CSV, Excel, JSON, and TXT files</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-comments"></i>
+                    <h3>Natural Language</h3>
+                    <p>Describe what you want in plain English</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-chart-pie"></i>
+                    <h3>Auto Visualization</h3>
+                    <p>Generate charts and insights automatically</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-sort"></i>
+                    <h3>Smart Organization</h3>
+                    <p>Organize data into multiple sheets or files</p>
                 </div>
             </div>
         </section>
 
-        <!-- Instructions Section -->
-        <section id="analyze" class="mb-5">
-            <div class="row">
-                <div class="col-lg-8 mx-auto">
-                    <div class="card shadow">
-                        <div class="card-header bg-success text-white">
-                            <h3 class="card-title mb-0"><i class="bi bi-chat-text"></i> Step 2: Describe What You Want</h3>
-                        </div>
-                        <div class="card-body">
-                            <div class="mb-3">
-                                <label for="instructions" class="form-label">Natural Language Instructions</label>
-                                <textarea class="form-control" id="instructions" rows="4" 
-                                    placeholder="Example: Sort data by sales amount and create a monthly trend chart, highlight top 10 performers, and group by region..."></textarea>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <h6>Example Instructions:</h6>
-                                    <div class="example-chips">
-                                        <span class="badge bg-light text-dark mb-2 example-chip" onclick="setInstruction(this.textContent)">
-                                            Sort by revenue and create charts
-                                        </span>
-                                        <span class="badge bg-light text-dark mb-2 example-chip" onclick="setInstruction(this.textContent)">
-                                            Group customers by region
-                                        </span>
-                                        <span class="badge bg-light text-dark mb-2 example-chip" onclick="setInstruction(this.textContent)">
-                                            Calculate quarterly totals
-                                        </span>
-                                        <span class="badge bg-light text-dark mb-2 example-chip" onclick="setInstruction(this.textContent)">
-                                            Identify outliers and trends
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <h6>Processing Options:</h6>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="createCharts" checked>
-                                        <label class="form-check-label" for="createCharts">Generate Charts</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="summaryStats" checked>
-                                        <label class="form-check-label" for="summaryStats">Summary Statistics</label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="insights" checked>
-                                        <label class="form-check-label" for="insights">AI Insights</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="d-grid mt-3">
-                                <button class="btn btn-success btn-lg" id="processBtn" onclick="startProcessing()">
-                                    <i class="bi bi-gear-fill"></i> Process Data
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <footer class="footer">
+            <p>&copy; 2025 Smart Data Organizer & Analyzer. Made with ❤️ for data enthusiasts.</p>
+            <div class="footer-links">
+                <a href="https://github.com/Abhisheksingh17cyber/excellsorted" target="_blank">
+                    <i class="fab fa-github"></i> View on GitHub
+                </a>
             </div>
-        </section>
-
-        <!-- Processing Status -->
-        <section id="processing" class="mb-5" style="display: none;">
-            <div class="row">
-                <div class="col-lg-8 mx-auto">
-                    <div class="card shadow">
-                        <div class="card-header bg-warning text-dark">
-                            <h3 class="card-title mb-0"><i class="bi bi-hourglass-split"></i> Processing Your Data</h3>
-                        </div>
-                        <div class="card-body">
-                            <div class="progress mb-3" style="height: 30px;">
-                                <div class="progress-bar progress-bar-striped progress-bar-animated" 
-                                     id="progressBar" role="progressbar" style="width: 0%">0%</div>
-                            </div>
-                            <div id="statusText">Analyzing files and preparing processing...</div>
-                            <div class="mt-3">
-                                <div class="processing-steps">
-                                    <div class="step-item" id="step1"><i class="bi bi-clock"></i> Data validation and parsing</div>
-                                    <div class="step-item" id="step2"><i class="bi bi-clock"></i> Instruction analysis</div>
-                                    <div class="step-item" id="step3"><i class="bi bi-clock"></i> Data transformations</div>
-                                    <div class="step-item" id="step4"><i class="bi bi-clock"></i> Chart generation</div>
-                                    <div class="step-item" id="step5"><i class="bi bi-clock"></i> Report compilation</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Results Section -->
-        <section id="download" class="mb-5" style="display: none;">
-            <div class="row">
-                <div class="col-lg-8 mx-auto">
-                    <div class="card shadow">
-                        <div class="card-header bg-info text-white">
-                            <h3 class="card-title mb-0"><i class="bi bi-download"></i> Your Results Are Ready!</h3>
-                        </div>
-                        <div class="card-body">
-                            <div class="alert alert-success">
-                                <i class="bi bi-check-circle-fill"></i> Processing completed successfully!
-                            </div>
-                            
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <h5>Generated Files:</h5>
-                                    <div class="list-group mb-3" id="resultFiles">
-                                        <div class="list-group-item d-flex justify-content-between align-items-center">
-                                            <div>
-                                                <i class="bi bi-file-earmark-spreadsheet text-success"></i>
-                                                <strong>Organized_Data.xlsx</strong>
-                                                <small class="d-block text-muted">Main data with multiple sheets</small>
-                                            </div>
-                                            <button class="btn btn-sm btn-outline-primary">Download</button>
-                                        </div>
-                                        <div class="list-group-item d-flex justify-content-between align-items-center">
-                                            <div>
-                                                <i class="bi bi-bar-chart text-primary"></i>
-                                                <strong>Analysis_Report.pdf</strong>
-                                                <small class="d-block text-muted">Charts and insights</small>
-                                            </div>
-                                            <button class="btn btn-sm btn-outline-primary">Download</button>
-                                        </div>
-                                        <div class="list-group-item d-flex justify-content-between align-items-center">
-                                            <div>
-                                                <i class="bi bi-file-text text-info"></i>
-                                                <strong>Summary_Statistics.csv</strong>
-                                                <small class="d-block text-muted">Key metrics and totals</small>
-                                            </div>
-                                            <button class="btn btn-sm btn-outline-primary">Download</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <h5>Quick Preview:</h5>
-                                    <div class="card bg-light">
-                                        <div class="card-body">
-                                            <canvas id="previewChart" width="300" height="200"></canvas>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="d-grid">
-                                <button class="btn btn-success btn-lg">
-                                    <i class="bi bi-download"></i> Download All as ZIP
-                                </button>
-                            </div>
-                            
-                            <div class="mt-3 text-center">
-                                <button class="btn btn-outline-secondary" onclick="resetApp()">
-                                    <i class="bi bi-arrow-counterclockwise"></i> Process New Files
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+        </footer>
     </div>
 
-    <!-- Footer -->
-    <footer class="bg-dark text-white mt-5 py-4">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <h5><i class="bi bi-file-spreadsheet"></i> Smart Data Organizer</h5>
-                    <p>Transform your data with natural language instructions.</p>
-                </div>
-                <div class="col-md-6">
-                    <h6>Features</h6>
-                    <ul class="list-unstyled">
-                        <li><i class="bi bi-check"></i> Multi-file upload support</li>
-                        <li><i class="bi bi-check"></i> Natural language processing</li>
-                        <li><i class="bi bi-check"></i> Automated chart generation</li>
-                        <li><i class="bi bi-check"></i> Excel report generation</li>
-                    </ul>
-                </div>
-            </div>
-            <hr>
-            <div class="text-center">
-                <p>&copy; 2025 Smart Data Organizer. Made with ❤️ for data enthusiasts.</p>
-            </div>
-        </div>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

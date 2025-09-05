@@ -1167,6 +1167,13 @@ const powerPointPro = new PowerPointPro();
 // Make it globally accessible for onclick handlers
 window.powerPointPro = powerPointPro;
 
+// Global initialization function for HTML
+window.initializePowerPointPro = function() {
+    console.log('PowerPoint Pro initialized successfully!');
+    // Additional initialization code if needed
+    powerPointPro.init();
+};
+
 // Export for module systems
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = PowerPointPro;

@@ -576,7 +576,12 @@
     <script>
         // Initialize the application when DOM is loaded
         document.addEventListener('DOMContentLoaded', function() {
-            initializePowerPointPro();
+            console.log('PowerPoint Pro page loaded successfully!');
+            // The PowerPointPro class is already initialized in script.js
+            // Just ensure everything is ready
+            if (window.powerPointPro) {
+                console.log('PowerPoint Pro instance found and ready!');
+            }
         });
     </script>
 </body>
